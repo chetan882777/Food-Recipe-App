@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 
 import com.chetan.foodrecipe.adapter.OnRecipeListener;
 import com.chetan.foodrecipe.adapter.RecipeRecyclerAdapter;
@@ -47,8 +48,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
         initRecyclerView();
         subscribeObserver();
-        testRetrofitRequest();
-
+        initSearchView();
     }
     private void subscribeObserver(){
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
@@ -68,9 +68,21 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void initSearchView(){
+        SearchView searchView = findViewById(R.id.search_view);
 
-    private  void testRetrofitRequest(){
-        mRecipeListViewModel.searchRecipeApi("indian" , 1);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mRecipeListViewModel.searchRecipeApi(query , 1);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     @Override
