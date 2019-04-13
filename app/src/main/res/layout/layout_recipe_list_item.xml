@@ -47,7 +47,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="90"
-                        android:textSize="@dimen/recipe_publisher_text_size"
+                        android:textSize="@dimen/recipe_publisher_text_Size"
                         android:id="@+id/recipe_publisher"
                         android:gravity="start"/>
 
@@ -55,7 +55,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
-                        android:textSize="@dimen/recipe_publisher_text_size"
+                        android:textSize="@dimen/recipe_publisher_text_Size"
                         android:textColor="@color/red"
                         android:id="@+id/recipe_social_score"
                         android:gravity="center"/>

@@ -2,6 +2,7 @@ package com.chetan.foodrecipe.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.chetan.foodrecipe.R;
 import com.chetan.foodrecipe.models.Recipe;
 
 import java.util.List;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -37,8 +40,10 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         RequestOptions requestOptions = new RequestOptions().placeholder(R.mipmap.ic_launcher);
 
         Glide.with(viewHolder.itemView.getContext()).setDefaultRequestOptions(requestOptions)
-                .load(mRecipes.get(i).getImg_url())
+                .load(mRecipes.get(i).getImage_url())
                 .into(((RecipeViewHolder)viewHolder).image);
+
+        Log.d(TAG, "--------------- onBindViewHolder: " + mRecipes.get(i).getImage_url());
 
         ((RecipeViewHolder)viewHolder).title.setText(mRecipes.get(i).getTitle());
         ((RecipeViewHolder)viewHolder).publisher.setText(mRecipes.get(i).getPublisher());
@@ -48,6 +53,9 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
+        if(mRecipes == null){
+            return 0;
+        }
         return mRecipes.size();
     }
 
