@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chetan.foodrecipe.R;
 import com.chetan.foodrecipe.models.Recipe;
 
@@ -31,6 +33,13 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+        RequestOptions requestOptions = new RequestOptions().placeholder(R.mipmap.ic_launcher);
+
+        Glide.with(viewHolder.itemView.getContext()).setDefaultRequestOptions(requestOptions)
+                .load(mRecipes.get(i).getImg_url())
+                .into(((RecipeViewHolder)viewHolder).image);
+
         ((RecipeViewHolder)viewHolder).title.setText(mRecipes.get(i).getTitle());
         ((RecipeViewHolder)viewHolder).publisher.setText(mRecipes.get(i).getPublisher());
         ((RecipeViewHolder)viewHolder).socialScore.setText(
