@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.chetan.foodrecipe.util.Constants.API_KEY;
 import static com.chetan.foodrecipe.util.Constants.BASE_URL;
 import static com.chetan.foodrecipe.util.Constants.NETWORK_TIMEOUT;
 
@@ -99,7 +100,7 @@ public class RecipeApiClient {
 
         private Call<RecipeSearchResponse> getRecipes(String query, int pageNumber) {
             return ServiceGenerator.getRecipeApi().searchRecipe(
-                    BASE_URL,
+                    API_KEY,
                     query,
                     String.valueOf(pageNumber)
             );

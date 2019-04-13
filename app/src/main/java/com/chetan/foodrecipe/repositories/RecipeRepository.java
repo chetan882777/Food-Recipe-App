@@ -25,4 +25,11 @@ public class RecipeRepository {
     }
 
     public LiveData<List<Recipe>> getRecipes(){return mRecipeApiClient.getRecipes();}
+
+    public void searchRecipeApi(String query , int pageNumber){
+        if(pageNumber == 0){
+            pageNumber =1 ;
+        }
+        mRecipeApiClient.searchRecipeApi(query , pageNumber);
+    }
 }
