@@ -1,28 +1,19 @@
 package com.chetan.foodrecipe;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 
 import com.chetan.foodrecipe.adapter.OnRecipeListener;
 import com.chetan.foodrecipe.adapter.RecipeRecyclerAdapter;
 import com.chetan.foodrecipe.models.Recipe;
-import com.chetan.foodrecipe.requests.RecipeApi;
-import com.chetan.foodrecipe.requests.ServiceGenerator;
-import com.chetan.foodrecipe.requests.responses.RecipeSearchResponse;
-import com.chetan.foodrecipe.util.Constants;
 import com.chetan.foodrecipe.viewmodels.RecipeListViewModel;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,6 +65,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mAdapter.displayLoading();
                 mRecipeListViewModel.searchRecipeApi(query , 1);
                 return false;
             }
