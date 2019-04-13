@@ -21,9 +21,11 @@ android {
 dependencies {
     def retrofitVersion =  '2.5.0'
     def lifecycleVersion = '1.1.1'
+    def supportVersion = "28.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -33,4 +35,15 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
+
+
+
+    // CardViews
+    implementation "com.android.support:cardview-v7:$supportVersion"
+
+    // RecyclerViews
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+
+    // Design Support
+    implementation "com.android.support:design:$supportVersion"
 }
