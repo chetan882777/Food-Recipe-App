@@ -16,9 +16,6 @@ import com.chetan.foodrecipe.viewmodels.RecipeListViewModel;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
 
@@ -95,5 +92,14 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private void displayCategoryList(){
         mRecipeListViewModel.setIsViewingRecipe(false);
         mAdapter.displayCategoryList();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mRecipeListViewModel.onBackPressed()){
+            super.onBackPressed();
+        }else{
+            displayCategoryList();
+        }
     }
 }
