@@ -32,4 +32,8 @@ public class RecipeRepository {
         }
         mRecipeApiClient.searchRecipeApi(query , pageNumber);
     }
+
+    public void cancelRequest(){
+        mRecipeApiClient.cancelRequest();
+    }
 }

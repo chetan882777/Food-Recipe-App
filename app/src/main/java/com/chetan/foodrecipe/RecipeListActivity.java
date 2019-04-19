@@ -7,7 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.chetan.foodrecipe.adapter.OnRecipeListener;
 import com.chetan.foodrecipe.adapter.RecipeRecyclerAdapter;
@@ -30,6 +33,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
         mRecipeRecyclerView = findViewById(R.id.recipe_recycleView);
 
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
@@ -49,6 +56,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 if(recipes != null){
                     if(mRecipeListViewModel.isViewingRecipe()) {
                         Log.d(TAG, "onChanged: " + recipes.size());
+                        mRecipeListViewModel.setIsPerformingQuery(false);
                         mAdapter.setRecipes(recipes);
                     }
                 }
@@ -103,5 +111,20 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         }else{
             displayCategoryList();
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipe_list_menu , menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_show_category){
+            displayCategoryList();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

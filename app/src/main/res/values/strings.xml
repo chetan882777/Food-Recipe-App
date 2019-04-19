@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FoodRecipe</string>
+    <string name="action_recipe_list_category">Category</string>
 </resources>
