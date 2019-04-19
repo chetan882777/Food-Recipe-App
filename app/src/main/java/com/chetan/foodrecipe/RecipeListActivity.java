@@ -47,8 +47,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if(recipes != null){
+                    if(mRecipeListViewModel.isViewingRecipe()) {
                         Log.d(TAG, "onChanged: " + recipes.size());
                         mAdapter.setRecipes(recipes);
+                    }
                 }
             }
         });
