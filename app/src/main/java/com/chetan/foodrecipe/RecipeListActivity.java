@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.widget.SearchView;
 
 import com.chetan.foodrecipe.adapter.OnRecipeListener;
 import com.chetan.foodrecipe.adapter.RecipeRecyclerAdapter;
@@ -40,6 +40,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         initRecyclerView();
         subscribeObserver();
         initSearchView();
+
+        if(!mRecipeListViewModel.isViewingRecipe()){
+            displayCategoryList();
+        }
     }
     private void subscribeObserver(){
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
@@ -84,6 +88,12 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onCategoryClick(String category) {
+        mAdapter.displayLoading();
+        mRecipeListViewModel.searchRecipeApi(category, 1);
+    }
 
+    private void displayCategoryList(){
+        mRecipeListViewModel.setIsViewingRecipe(false);
+        mAdapter.displayCategoryList();
     }
 }

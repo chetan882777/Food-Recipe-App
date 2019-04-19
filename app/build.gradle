@@ -51,4 +51,7 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // circular imageView
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }
