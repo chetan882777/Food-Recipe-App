@@ -42,6 +42,12 @@ public class RecipeListViewModel extends ViewModel {
         return mIsPerformingQuery;
     }
 
+    public void searchNextPage(){
+        if(!isPerformingQuery() && mIsViewingRecipe){
+            mRecipeRepository.searchNextPage();
+        }
+    }
+
     public void setIsPerformingQuery(boolean isPerformingQuery) {
         mIsPerformingQuery = isPerformingQuery;
     }

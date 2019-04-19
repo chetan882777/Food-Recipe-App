@@ -2,6 +2,7 @@ package com.chetan.foodrecipe;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.chetan.foodrecipe.adapter.OnRecipeListener;
 import com.chetan.foodrecipe.adapter.RecipeRecyclerAdapter;
@@ -68,6 +70,17 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mAdapter = new RecipeRecyclerAdapter(this);
         mRecipeRecyclerView.setAdapter(mAdapter);
         mRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRecipeRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if(!mRecipeRecyclerView.canScrollVertically(1)){
+                        mRecipeListViewModel.searchNextPage();
+                    }
+                }
+            });
+        }
     }
 
     private void initSearchView(){
