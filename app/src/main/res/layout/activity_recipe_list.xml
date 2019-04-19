@@ -6,19 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".RecipeListActivity">
 
-    <TextView
+
+    <!-- for always maintaining 4dp elevation of status bar when scrolling -->
+    <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:elevation="6dp"
+        android:layout_height="1dp"
+        android:elevation="4dp"
         android:background="@color/colorPrimaryDark"
-        android:text="Food Recipes"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:textColor="#fff"
         />
 
     <android.support.design.widget.AppBarLayout
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
