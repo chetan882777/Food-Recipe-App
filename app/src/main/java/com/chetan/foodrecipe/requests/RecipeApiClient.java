@@ -62,7 +62,7 @@ public class RecipeApiClient {
     private class RetirveRecipesRunnable implements Runnable {
         private String query;
         private int pageNumber;
-        boolean cancelRequest;
+        private boolean cancelRequest;
 
 
         public RetirveRecipesRunnable(String query, int pageNumber) {
@@ -104,6 +104,16 @@ public class RecipeApiClient {
                     query,
                     String.valueOf(pageNumber)
             );
+        }
+
+        private void cancelRequest(){
+            cancelRequest = true;
+        }
+    }
+
+    public void cancelRequest(){
+        if(mRetirveRecipesRunnable != null) {
+            mRetirveRecipesRunnable.cancelRequest();
         }
     }
 }
