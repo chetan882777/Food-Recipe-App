@@ -11,6 +11,10 @@ public class RecipeViewModel extends ViewModel {
     private RecipeRepository mRecipeRepository;
     private String mRecipeId;
 
+    private Boolean didiRetrieveRecipe;
+
+
+
     public RecipeViewModel(){
         mRecipeRepository = RecipeRepository.getInstance();
     }
@@ -23,8 +27,18 @@ public class RecipeViewModel extends ViewModel {
         return mRecipeRepository.getRecipe();
     }
 
+    public LiveData<Boolean> isNetworkTimedOut(){return mRecipeRepository.isNetworkTimedOut();}
+
     public void searchRecipeById(String recipeId){
         mRecipeId = recipeId;
         mRecipeRepository.searchRecipeById(recipeId);
+    }
+
+    public Boolean getDidiRetrieveRecipe() {
+        return didiRetrieveRecipe;
+    }
+
+    public void setDidiRetrieveRecipe(Boolean didiRetrieveRecipe) {
+        this.didiRetrieveRecipe = didiRetrieveRecipe;
     }
 }

@@ -28,6 +28,7 @@ public class RecipeApiClient {
 
     private RetrieveRecipesRunnable mRetrieveRecipesRunnable;
     private RetrieveRecipeRunnable mRetrieveRecipeRunnable;
+    private MutableLiveData<Boolean> mNetworkTimeOut;
 
     private static final String TAG = "RecipeApiClient";
 
@@ -41,6 +42,7 @@ public class RecipeApiClient {
     public RecipeApiClient() {
         mRecipes = new MutableLiveData<>();
         mRecipe = new MutableLiveData<>();
+        mNetworkTimeOut = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<Recipe>> getRecipes() {
@@ -51,11 +53,16 @@ public class RecipeApiClient {
         return mRecipe;
     }
 
+    public MutableLiveData<Boolean> isNetworkTimedOut(){
+        return mNetworkTimeOut;
+    }
+
 
     public void searchRecipeApi(String query, int pageNumber) {
         if (mRetrieveRecipesRunnable != null) {
             mRetrieveRecipesRunnable = null;
         }
+        mNetworkTimeOut.postValue(false);
         mRetrieveRecipesRunnable = new RetrieveRecipesRunnable(query, pageNumber);
         final Future handler = AppExecuters.getInstance().NetworkIO().submit(mRetrieveRecipesRunnable);
 
@@ -65,6 +72,7 @@ public class RecipeApiClient {
 
                 // let user know its timed out
                 handler.cancel(true);
+                mNetworkTimeOut.postValue(true);
             }
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
     }
@@ -73,6 +81,7 @@ public class RecipeApiClient {
         if (mRetrieveRecipeRunnable != null) {
             mRetrieveRecipeRunnable = null;
         }
+        mNetworkTimeOut.postValue(false);
         mRetrieveRecipeRunnable = new RetrieveRecipeRunnable(recipeId);
         final Future handler = AppExecuters.getInstance().NetworkIO().submit(mRetrieveRecipeRunnable);
 
@@ -82,6 +91,7 @@ public class RecipeApiClient {
 
                 // let user know its timed out
                 handler.cancel(true);
+                mNetworkTimeOut.postValue(true);
             }
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
     }

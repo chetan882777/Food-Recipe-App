@@ -60,7 +60,17 @@ public class RecipeActivity extends BaseActivity {
                 if(recipe != null){
                     if(recipe.getRecipe_id().equals(mRecipeViewModel.getRecipeId())) {
                         setRecipeProperties(recipe);
+                        mRecipeViewModel.setDidiRetrieveRecipe(true);
                     }
+                }
+            }
+        });
+
+        mRecipeViewModel.isNetworkTimedOut().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if(aBoolean && mRecipeViewModel.getDidiRetrieveRecipe()){
+                    Log.d(TAG, "onChanged: network time out");
                 }
             }
         });
