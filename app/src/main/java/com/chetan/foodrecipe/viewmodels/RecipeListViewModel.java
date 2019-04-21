@@ -20,6 +20,8 @@ public class RecipeListViewModel extends ViewModel {
         mRecipeRepository = RecipeRepository.getInstance();
     }
 
+    public LiveData<Boolean> isQueryExhousted(){ return mRecipeRepository.isQueryExhousted(); }
+
     public LiveData<List<Recipe>> getRecipes(){
         return mRecipeRepository.getRecipes();
     }
@@ -43,7 +45,7 @@ public class RecipeListViewModel extends ViewModel {
     }
 
     public void searchNextPage(){
-        if(!isPerformingQuery() && mIsViewingRecipe){
+        if(!isPerformingQuery() && mIsViewingRecipe && !isQueryExhousted().getValue()){
             mRecipeRepository.searchNextPage();
         }
     }
