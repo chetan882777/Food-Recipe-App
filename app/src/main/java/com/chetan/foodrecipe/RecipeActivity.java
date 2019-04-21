@@ -58,7 +58,9 @@ public class RecipeActivity extends BaseActivity {
             @Override
             public void onChanged(@Nullable Recipe recipe) {
                 if(recipe != null){
-                    setRecipeProperties(recipe);
+                    if(recipe.getRecipe_id().equals(mRecipeViewModel.getRecipeId())) {
+                        setRecipeProperties(recipe);
+                    }
                 }
             }
         });
