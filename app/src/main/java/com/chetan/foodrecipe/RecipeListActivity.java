@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import android.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +39,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
-        setSupportActionBar(toolbar);
+        setActionBar(toolbar);
 
         mRecipeRecyclerView = findViewById(R.id.recipe_recycleView);
 

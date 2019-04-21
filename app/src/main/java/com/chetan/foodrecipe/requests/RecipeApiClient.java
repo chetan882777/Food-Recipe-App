@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.chetan.foodrecipe.AppExecuters;
 import com.chetan.foodrecipe.models.Recipe;
+import com.chetan.foodrecipe.requests.responses.RecipeResponse;
 import com.chetan.foodrecipe.requests.responses.RecipeSearchResponse;
 
 import java.io.IOException;
@@ -17,13 +18,16 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import static com.chetan.foodrecipe.util.Constants.API_KEY;
-import static com.chetan.foodrecipe.util.Constants.BASE_URL;
 import static com.chetan.foodrecipe.util.Constants.NETWORK_TIMEOUT;
 
 public class RecipeApiClient {
     private static RecipeApiClient instance;
+
     private MutableLiveData<List<Recipe>> mRecipes;
-    private RetirveRecipesRunnable mRetirveRecipesRunnable;
+    private MutableLiveData<Recipe> mRecipe;
+
+    private RetrieveRecipesRunnable mRetrieveRecipesRunnable;
+    private RetrieveRecipeRunnable mRetrieveRecipeRunnable;
 
     private static final String TAG = "RecipeApiClient";
 
@@ -36,18 +40,24 @@ public class RecipeApiClient {
 
     public RecipeApiClient() {
         mRecipes = new MutableLiveData<>();
+        mRecipe = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<Recipe>> getRecipes() {
         return mRecipes;
     }
 
-    public void searchRecipeApi(String query , int pageNumber) {
-        if(mRetirveRecipesRunnable != null){
-            mRetirveRecipesRunnable = null;
+    public MutableLiveData<Recipe> getRecipe() {
+        return mRecipe;
+    }
+
+
+    public void searchRecipeApi(String query, int pageNumber) {
+        if (mRetrieveRecipesRunnable != null) {
+            mRetrieveRecipesRunnable = null;
         }
-        mRetirveRecipesRunnable = new RetirveRecipesRunnable(query , pageNumber);
-        final Future handler = AppExecuters.getInstance().NetworkIO().submit(mRetirveRecipesRunnable);
+        mRetrieveRecipesRunnable = new RetrieveRecipesRunnable(query, pageNumber);
+        final Future handler = AppExecuters.getInstance().NetworkIO().submit(mRetrieveRecipesRunnable);
 
         AppExecuters.getInstance().NetworkIO().schedule(new Runnable() {
             @Override
@@ -59,13 +69,30 @@ public class RecipeApiClient {
         }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
-    private class RetirveRecipesRunnable implements Runnable {
+    public void searchRecipeById(String recipeId) {
+        if (mRetrieveRecipeRunnable != null) {
+            mRetrieveRecipeRunnable = null;
+        }
+        mRetrieveRecipeRunnable = new RetrieveRecipeRunnable(recipeId);
+        final Future handler = AppExecuters.getInstance().NetworkIO().submit(mRetrieveRecipeRunnable);
+
+        AppExecuters.getInstance().NetworkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+
+                // let user know its timed out
+                handler.cancel(true);
+            }
+        }, NETWORK_TIMEOUT, TimeUnit.MILLISECONDS);
+    }
+
+    private class RetrieveRecipesRunnable implements Runnable {
         private String query;
         private int pageNumber;
         private boolean cancelRequest;
 
 
-        public RetirveRecipesRunnable(String query, int pageNumber) {
+        public RetrieveRecipesRunnable(String query, int pageNumber) {
             this.query = query;
             this.pageNumber = pageNumber;
         }
@@ -106,14 +133,60 @@ public class RecipeApiClient {
             );
         }
 
-        private void cancelRequest(){
+        private void cancelRequest() {
             cancelRequest = true;
         }
     }
 
-    public void cancelRequest(){
-        if(mRetirveRecipesRunnable != null) {
-            mRetirveRecipesRunnable.cancelRequest();
+
+    private class RetrieveRecipeRunnable implements Runnable {
+        private String recipeId;
+        private boolean cancelRequest;
+
+
+        public RetrieveRecipeRunnable(String recipeId) {
+            this.recipeId = recipeId;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Response response = getRecipe(recipeId).execute();
+                if (cancelRequest) {
+                    return;
+                }
+                if (response.code() == 200) {
+                    Recipe recipe = ((RecipeResponse) response.body()).getRecipe();
+                    mRecipe.postValue(recipe);
+
+                } else {
+                    String error = response.errorBody().string();
+                    Log.e(TAG, "run: " + error);
+                    mRecipe.postValue(null);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                mRecipe.postValue(null);
+            }
+        }
+
+
+        private Call<RecipeResponse> getRecipe(String recipeId) {
+            return ServiceGenerator.getRecipeApi().getRecipe(API_KEY, recipeId);
+        }
+
+        private void cancelRequest() {
+            cancelRequest = true;
+        }
+    }
+
+
+    public void cancelRequest() {
+        if (mRetrieveRecipesRunnable != null) {
+            mRetrieveRecipesRunnable.cancelRequest();
+        }
+        if (mRetrieveRecipeRunnable != null) {
+            mRetrieveRecipeRunnable.cancelRequest();
         }
     }
 }
